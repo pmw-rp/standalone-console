@@ -1,0 +1,57 @@
+console:
+  config:
+    console:
+      maxDeserializationPayloadSize: 1048576
+    kafka:
+      brokers:
+        - seed-random.redacted.fmc.prd.cloud.redpanda.com:9092
+      clientId: redpanda-console
+      sasl:
+        enabled: true
+        mechanism: SCRAM-SHA-256
+        username: cloud-user
+      tls:
+        enabled: true
+      schemaRegistry:
+        enabled: true
+        urls: ["https://schema-registry-random.redacted.fmc.prd.cloud.redpanda.com:30081"]
+        username: cloud-user
+        tls:
+          enabled: true
+    licenseFilePath: /tmp/redpanda.license
+    login:
+      enabled: true
+      plain:
+        enabled: true
+        credentials:
+          - username: local-user
+            password: somethingsecure
+    enterprise:
+      rbac:
+        enabled: true
+        roleBindingsFilepath: /tmp/redpanda/role-bindings.yaml
+
+secret:
+  create: true
+  kafka:
+    saslPassword: REDACTED
+    schemaRegistryPassword: REDACTED
+
+extraVolumes:
+  - name: extra-config
+    configMap:
+      name: extra-config
+  - name: license
+    secret:
+      secretName: license
+
+tls:
+  enabled: true
+
+extraVolumeMounts:
+  - name: extra-config
+    mountPath: /tmp/redpanda
+    readOnly: true
+  - name: license
+    mountPath: /tmp/
+    readOnly: true

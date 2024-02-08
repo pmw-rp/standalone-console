@@ -1,0 +1,8 @@
+roleBindings:
+  - roleName: admin
+    metadata:
+      name: Administrators
+    subjects:
+      - kind: user
+        provider: Plain
+        name: local-user
